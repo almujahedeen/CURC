@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:maps="clr-namespace:Xamarin.Forms.GoogleMaps;assembly=Xamarin.Forms.GoogleMaps"
+             xmlns:behaviors="clr-namespace:Curc.Behaviors"
+             xmlns:helpers="clr-namespace:Curc.Helpers"
+             x:Class="Curc.Views.MapPage"
+             Title="Ride Info">
+    <ContentPage.Content>
+        <Grid Padding="10" RowSpacing="8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="4*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <Label Text="{Binding rideName, Mode=OneWay}"
+                   Style="{StaticResource headerLabelStyle}"
+                   FontSize="Medium"
+                   VerticalOptions="Center"
+                   Grid.Row="0"
+                   Grid.RowSpan="1"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="1"/>
+            <Button Text="Edit"
+                    IsVisible="{Binding Path=loginModel.isAdmin, Source={x:Static helpers:Cache.instance}}"
+                    Command="{Binding mapViewModel.editCommand}"
+                    Grid.Row="0"
+                    Grid.RowSpan="1"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="1"/>
+            <ScrollView Grid.Row="1"
+                        Grid.RowSpan="1"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2">
+                <Label Text="{Binding rideDescription, Mode=OneWay}"
+                       TextColor="White"
+                       FontSize="Small"/>
+            </ScrollView>
+            <Label Text="{Binding rideDate, Mode=OneWay, StringFormat='Date: {0:MMMM/dd/yyyy} @ {0:hh:mm tt}'}"
+                   Style="{StaticResource yellowLabelStyle}"
+                   FontSize="Medium"
+                   Grid.Row="2"
+                   Grid.RowSpan="1"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="2"/>
+            <maps:Map Grid.Row="3"
+                      Grid.RowSpan="1"
+                      Grid.Column="0"
+                      Grid.ColumnSpan="2"/>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

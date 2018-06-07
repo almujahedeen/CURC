@@ -1,0 +1,47 @@
+-MasterDetail
+-Master
+	-OverviewMap
+	-ListOfRides
+	-Profile
+	-About
+-Detail
+	-OverviewMap (ActionCable)
+		-Map
+			-Pins
+	-RidesListPage
+		-AddRide (Admin or suggest as user)
+		-RideList
+			-RideItem
+				-RideName
+				-RideStartLocation
+				-RideEndlocation
+				-RideDate
+	-RideEditorPage
+		-RideName
+		-RideDesc
+		-RideDate
+		-AutoCompleteAddress
+		-AddMeetupPlace
+		-AddLeg
+		-AddStop
+		-AddFinish
+	-MapPage
+		-Map
+			-Pins
+			-Routes
+		-StartNavigateViaGoogleMaps
+		-RideName
+		-RideDesc
+		-RideDate
+		-RideStartLocation
+		-RideEndlocation
+	-Profile
+		-Photo
+		-Name
+		-MotorcycleMake
+		-MotorPhoto
+		-BroadcastMyLocation
+	-AboutPage
+		-AuthorName
+		-Copyright
+		-Rider's group page

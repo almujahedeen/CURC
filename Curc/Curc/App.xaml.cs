@@ -1,3 +1,4 @@
+using Curc.Views;
 using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -7,12 +8,11 @@ namespace Curc
 {
 	public partial class App : Application
 	{
-		public App ()
+        public App ()
 		{
 			InitializeComponent();
-
-			MainPage = new MainPage();
-		}
+            MainPage = new MainPage();
+        }
 
 		protected override void OnStart ()
 		{

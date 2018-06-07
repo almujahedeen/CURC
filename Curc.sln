@@ -7,7 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curc.Android", "Curc\Curc.A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curc.iOS", "Curc\Curc.iOS\Curc.iOS.csproj", "{7057A5F7-B58D-4B7B-B5D1-DEEF338F7CE9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curc", "Curc\Curc\Curc.csproj", "{1D02FBCF-0C7B-4884-8AB2-A4721E30D361}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Curc", "Curc\Curc\Curc.csproj", "{1D02FBCF-0C7B-4884-8AB2-A4721E30D361}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C48BA7A1-2BA4-4FF5-8487-BDD09BED59D6}"
+	ProjectSection(SolutionItems) = preProject
+		ProjectNotes.txt = ProjectNotes.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

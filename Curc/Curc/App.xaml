@@ -1,8 +1,53 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:behaviors="clr-namespace:Curc.Behaviors"
              x:Class="Curc.App">
-	<Application.Resources>
-    
+    <Application.Resources>
+        <ResourceDictionary>
+            <Color x:Key="curcYellow">#FDE34A</Color>
+            <Color x:Key="curcBlack">#302D2D</Color>
+            <Color x:Key="curcBlackCommon">#1E1E1E</Color>
+            <Color x:Key="transparentBlack">#C8302D2D</Color>
+
+            <Style x:Key="yellowLabelStyle" TargetType="Label" >
+                <Setter Property="TextColor" Value="{StaticResource curcYellow}"/>
+            </Style>
+            <Style x:Key="headerLabelStyle" BasedOn="{StaticResource yellowLabelStyle}" TargetType="Label">
+                <Setter Property="FontSize" Value="Large"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+            </Style>
+            
+            <Style TargetType="NavigationPage">
+                <Setter Property="BackgroundColor" Value="{StaticResource curcBlackCommon}"/>
+                <Setter Property="BarBackgroundColor" Value="{StaticResource curcBlack}"/>
+                <Setter Property="BarTextColor" Value="{StaticResource curcYellow}"/>
+            </Style>
+            <Style TargetType="ContentPage" ApplyToDerivedTypes="True">
+                <Setter Property="BackgroundColor" Value="{StaticResource curcBlackCommon}"/>
+            </Style>
+            <Style TargetType="StackLayout">
+                <Setter Property="BackgroundColor" Value="Transparent"/>
+                <Setter Property="Spacing" Value="0"/>
+            </Style>
+            <Style TargetType="ScrollView">
+                <Setter Property="BackgroundColor" Value="Transparent"/>
+            </Style>
+            <Style TargetType="TableView">
+                <Setter Property="BackgroundColor" Value="Transparent"/>
+            </Style>
+            <Style TargetType="ListView">
+                <Setter Property="BackgroundColor" Value="Transparent"/>
+                <Setter Property="SeparatorVisibility" Value="None"/>
+            </Style>
+
+            <Style TargetType="Button">
+                <Setter Property="TextColor" Value="{StaticResource curcYellow}"/>
+                <Setter Property="BackgroundColor" Value="Transparent"/>
+                <Setter Property="BorderColor" Value="{StaticResource curcYellow}"/>
+                <Setter Property="BorderWidth" Value="1"/>
+                <Setter Property="behaviors:CircularButtonBehavior.attachBehavior" Value="True"/>
+            </Style>
+        </ResourceDictionary>
 	</Application.Resources>
 </Application>

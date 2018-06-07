@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:behaviors="clr-namespace:Curc.Behaviors"
+             xmlns:maps="clr-namespace:Xamarin.Forms.GoogleMaps;assembly=Xamarin.Forms.GoogleMaps"
+             xmlns:valueconverters="clr-namespace:Curc.ValueConverters"
+             xmlns:effects="clr-namespace:Curc.Effects"
+             x:Class="Curc.Views.RideEdit2Page"
+             Title="Edit Route">
+    <ContentPage.Behaviors>
+        <behaviors:EventToCommandBehavior EventName="Appearing"
+                                          Command="{Binding onAppearingCommand}"/>
+        <behaviors:EventToCommandBehavior EventName="Disappearing"
+                                          Command="{Binding onDisappearingCommand}"/>
+    </ContentPage.Behaviors>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Label" BasedOn="{StaticResource yellowLabelStyle}">
+                <Setter Property="FontSize" Value="Medium"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="HorizontalOptions" Value="StartAndExpand"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="InputTransparent" Value="True"/>
+            </Style>
+            <Style TargetType="Image">
+                <Setter Property="HorizontalOptions" Value="EndAndExpand"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="InputTransparent" Value="True"/>
+            </Style>
+            <Style TargetType="StackLayout">
+                <Setter Property="Orientation" Value="Horizontal"/>
+                <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+                <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+            </Style>
+            <Style TargetType="Frame">
+                <Setter Property="Padding" Value="0,5,0,5"/>
+                <Setter Property="BackgroundColor" Value="{StaticResource curcBlack}"/>
+            </Style>
+            <valueconverters:ListCountToBool x:Key="listCountToBool"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid Padding="10,10,10,10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Frame Grid.Row="0" Grid.Column="0">
+                <StackLayout effects:ButtonViewEffect.clickedCommand="{Binding addStartCommand}">
+                    <Image Source="start"/>
+                    <Label Text="Add Start"/>
+                </StackLayout>
+            </Frame>
+            <Frame Grid.Row="0" Grid.Column="1">
+                <StackLayout effects:ButtonViewEffect.clickedCommand="{Binding addLegCommand}">
+                    <Image Source="leg"/>
+                    <Label Text="Add Leg"/>
+                </StackLayout>
+            </Frame>
+            <Frame Grid.Row="1" Grid.Column="0">
+                <StackLayout effects:ButtonViewEffect.clickedCommand="{Binding addStopoverCommand}">
+                    <Image Source="stopover"/>
+                    <Label Text="Add Stopover"/>
+                </StackLayout>
+            </Frame>
+            <Frame Grid.Row="1" Grid.Column="1">
+                <StackLayout effects:ButtonViewEffect.clickedCommand="{Binding addEndCommand}">
+                    <Image Source="end"/>
+                    <Label Text="Add End"/>
+                </StackLayout>
+            </Frame>
+
+            <RelativeLayout  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+                <maps:Map RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                          RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}">
+                    <maps:Map.Behaviors>
+                        <behaviors:RideEdit2MapBindingsBehavior visibleRegion="{Binding visibleRegion}"
+                                                                moveToRegionCommand="{Binding moveToRegionCommand}"
+                                                                pins="{Binding pins}"/>
+                    </maps:Map.Behaviors>
+                </maps:Map>
+                <Image RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=0.5, Constant=-12.5}"
+                       RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.5, Constant=-25}"
+                       Source="center_pin"
+                       WidthRequest="25"
+                       HeightRequest="25"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"/>
+                <Entry x:Name="searchEntry"
+                       Text="{Binding searchText}"
+                       RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                       Placeholder="Enter Address Here"
+                       BackgroundColor="{StaticResource transparentBlack}"
+                       TextColor="{StaticResource curcYellow}"
+                       PlaceholderColor="Gray"
+                       HorizontalTextAlignment="Center"/>
+                <ListView RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                          RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.5}"
+                          RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToView, ElementName=searchEntry, Property=Height, Factor=1}"
+                          BackgroundColor="{StaticResource transparentBlack}"
+                          IsVisible="{Binding isListViewVisible}"
+                          ItemsSource="{Binding searchResults}"
+                          SeparatorColor="{StaticResource curcYellow}"
+                          SeparatorVisibility="Default">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextCell Text="{Binding description}" TextColor="{StaticResource curcYellow}"/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.Behaviors>
+                        <behaviors:ListViewNoHighlightCommandBehavior itemSelectedCommand="{Binding searchSuggestionSelectedCommand}"/>
+                    </ListView.Behaviors>
+                </ListView>
+            </RelativeLayout>
+            <Button Text="Save"
+                    Command="{Binding saveCommand}"
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"/>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

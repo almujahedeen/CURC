@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ffimage="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:fftransform="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+             xmlns:behaviors="clr-namespace:Curc.Behaviors"
+             xmlns:helpers="clr-namespace:Curc.Helpers"
+             x:Class="Curc.Views.MainMasterPage"
+             Title="MainMasterPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="cellStackStyle" TargetType="StackLayout">
+                <Setter Property="BackgroundColor" Value="Transparent"/>
+                <Setter Property="Orientation" Value="Horizontal"/>
+            </Style>
+            <Style x:Key="cellImageStyle" TargetType="Image">
+                <Setter Property="Margin" Value="20,0,20,0"/>
+                <Setter Property="HorizontalOptions" Value="Start"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+            </Style>
+            <Style x:Key="cellLabeStyle" TargetType="Label" BasedOn="{StaticResource yellowLabelStyle}">
+                <Setter Property="FontSize" Value="Medium"/>
+                <Setter Property="HorizontalOptions" Value="Start"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="Margin" Value="0,10,0,10"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout>
+                <ffimage:CachedImage Source="{Binding Path=loginModel.userImage, Source={x:Static helpers:Cache.instance}}"
+                                     Margin="0,50,0,10"
+                                     WidthRequest="100"
+                                     HeightRequest="100"
+                                     HorizontalOptions="Center"
+                                     VerticalOptions="Start">
+                    <ffimage:CachedImage.Transformations>
+                        <fftransform:CircleTransformation BorderHexColor="#FDE34A"
+                                                      BorderSize="14"/>
+                    </ffimage:CachedImage.Transformations>
+                </ffimage:CachedImage>
+                <Label Text="{Binding Path=loginModel.userName, Source={x:Static helpers:Cache.instance}}"
+                       Margin="0,0,0,20"
+                       Style="{StaticResource headerLabelStyle}"
+                       HorizontalOptions="Center"/>
+
+                <TableView Intent="Menu">
+                    <TableRoot>
+                        <TableSection>
+                            <ViewCell behaviors:EventToCommandBehaviorAttached.eventName="Tapped"
+                                      behaviors:EventToCommandBehaviorAttached.command="{Binding overViewCommand}">
+                                <StackLayout Style="{StaticResource cellStackStyle}">
+                                    <Image Source="overview" Style="{StaticResource cellImageStyle}"/>
+                                    <Label Text="Overview" Style="{StaticResource cellLabeStyle}"/>
+                                </StackLayout>
+                            </ViewCell>
+                            <ViewCell behaviors:EventToCommandBehaviorAttached.eventName="Tapped"
+                                      behaviors:EventToCommandBehaviorAttached.command="{Binding rideListCommand}">
+                                <StackLayout Style="{StaticResource cellStackStyle}">
+                                    <Image Source="ridelist" Style="{StaticResource cellImageStyle}"/>
+                                    <Label Text="Ride List" Style="{StaticResource cellLabeStyle}"/>
+                                </StackLayout>
+                            </ViewCell>
+                            <ViewCell behaviors:EventToCommandBehaviorAttached.eventName="Tapped"
+                                      behaviors:EventToCommandBehaviorAttached.command="{Binding profileCommand}">
+                                <StackLayout Style="{StaticResource cellStackStyle}">
+                                    <Image Source="profile" Style="{StaticResource cellImageStyle}"/>
+                                    <Label Text="My Profile" Style="{StaticResource cellLabeStyle}"/>
+                                </StackLayout>
+                            </ViewCell>
+                            <ViewCell behaviors:EventToCommandBehaviorAttached.eventName="Tapped"
+                                      behaviors:EventToCommandBehaviorAttached.command="{Binding aboutCommand}">
+                                <StackLayout Style="{StaticResource cellStackStyle}">
+                                    <Image Source="about" Style="{StaticResource cellImageStyle}"/>
+                                    <Label Text="About" Style="{StaticResource cellLabeStyle}"/>
+                                </StackLayout>
+                            </ViewCell>
+                            <ViewCell behaviors:EventToCommandBehaviorAttached.eventName="Tapped"
+                                      behaviors:EventToCommandBehaviorAttached.command="{Binding logoutCommand}">
+                                <StackLayout Style="{StaticResource cellStackStyle}">
+                                    <Image Source="about" Style="{StaticResource cellImageStyle}"/>
+                                    <Label Text="Logout" Style="{StaticResource cellLabeStyle}"/>
+                                </StackLayout>
+                            </ViewCell>
+                        </TableSection>
+                    </TableRoot>
+                </TableView>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>
