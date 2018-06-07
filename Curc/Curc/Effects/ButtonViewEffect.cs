@@ -56,7 +56,8 @@ namespace Curc.Effects
                     break;
                 case Enumerations.TouchActionType.Released:
                     var command = GetclickedCommand(view);
-                    command?.Execute(null);
+					if (command != null && command.CanExecute(null))
+						command.Execute(null);
                     view.Opacity = 1;
                     break;
                 case Enumerations.TouchActionType.Exited:

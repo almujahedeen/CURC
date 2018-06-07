@@ -59,11 +59,11 @@ namespace Curc.Behaviors
                     if (oV != null) {
                         var oldValue = (ObservableCollection<UserPinModel>)oV;
                         owner.map.Pins.Clear();
-                        oldValue.CollectionChanged -= owner.NewValue_CollectionChanged;
+						oldValue.CollectionChanged -= owner.pinsChanged;
                     }
                     foreach (var item in newValue)
                         owner.map.Pins.Add(item.pin);
-                    newValue.CollectionChanged += owner.NewValue_CollectionChanged;
+                    newValue.CollectionChanged += owner.pinsChanged;
                 });
 
         public ObservableCollection<UserPinModel> pins {
@@ -71,7 +71,31 @@ namespace Curc.Behaviors
             set { SetValue(pinsProperty, value); }
         }
 
-        protected override void OnBindingContextChanged()
+		public static readonly BindableProperty routesProperty = BindableProperty.Create(
+			nameof(routes),
+			typeof(ObservableCollection<Polyline>),
+			typeof(RideEdit2MapBindingsBehavior),
+			default(ObservableCollection<Polyline>),
+			BindingMode.TwoWay,
+			propertyChanged: (bindable, p1, p2) => {
+				var view = bindable as RideEdit2MapBindingsBehavior;
+				var newValue = (ObservableCollection<Polyline>)p2;
+				if (p1 != null) {
+					var oldValue = (ObservableCollection<Polyline>)p1;
+					view.map.Polylines.Clear();
+					oldValue.CollectionChanged -= view.PolyLinesChanged;
+				}
+				foreach (var item in newValue)
+					view.map.Polylines.Add(item);
+				newValue.CollectionChanged += view.PolyLinesChanged;
+			}
+		);
+		public ObservableCollection<Polyline> routes {
+			get { return (ObservableCollection<Polyline>)GetValue(routesProperty); }
+			set { SetValue(routesProperty, value); }
+		}
+
+		protected override void OnBindingContextChanged()
         {
             base.OnBindingContextChanged();
             if (this.BindingContext!=null) {
@@ -80,7 +104,7 @@ namespace Curc.Behaviors
             }
         }
 
-        protected override void OnAttachedTo(Map bindable)
+		protected override void OnAttachedTo(Map bindable)
         {
             base.OnAttachedTo(bindable);
             map = bindable;
@@ -98,7 +122,7 @@ namespace Curc.Behaviors
             this.visibleRegion = map.VisibleRegion;
         }
 
-        private void NewValue_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void pinsChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action) {
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
@@ -119,5 +143,27 @@ namespace Curc.Behaviors
                     throw new NotImplementedException();
             }
         }
+
+		void PolyLinesChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+		{
+			switch (e.Action) {
+				case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
+					foreach (Polyline item in e.NewItems)
+						map.Polylines.Add(item);
+					break;
+				case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
+					foreach (Polyline item in e.OldItems)
+						map.Polylines.Remove(item);
+					break;
+				case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
+					map.Polylines.Clear();
+					break;
+
+				case System.Collections.Specialized.NotifyCollectionChangedAction.Move:
+					throw new NotImplementedException();
+				case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
+					throw new NotImplementedException();
+			}
+		}
     }
 }

@@ -41,14 +41,8 @@ namespace Curc.ViewModels
             Task.Run(async () => {
                 var downloadedPins = simulateWS();
                 foreach (var pin in downloadedPins) {
-                    var imageStream = await pin.image.toStreamAsync();
-                    if (imageStream != null) {
-                        using (var editableImage = await Plugin.ImageEdit.CrossImageEdit.Current.CreateImageAsync(imageStream)) {
-                            var modified = editableImage.Resize(((int)(30 * Constants.nativeScale)), ((int)(30 * Constants.nativeScale))).ToPng();
-                            pin.pin.Icon = BitmapDescriptorFactory.FromStream(new MemoryStream(modified));
-                            Device.BeginInvokeOnMainThread(() => userPins.Add(pin));
-                        }
-                    }
+					await pin.downloadImageLink();
+					Device.BeginInvokeOnMainThread(() => userPins.Add(pin));
                 }
             });
         }

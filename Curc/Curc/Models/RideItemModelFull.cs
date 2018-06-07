@@ -15,6 +15,7 @@ namespace Curc.Models
         public string rideDescription { get; set; }
         public TimeSpan rideTime { get; set; }
 
+
         //ViewModels
         public MapViewModel mapViewModel { get; set; }
         public RideEdit1ViewModel rideEdit1ViewModel { get; set; }

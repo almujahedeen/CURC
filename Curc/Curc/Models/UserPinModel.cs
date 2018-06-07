@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.GoogleMaps;
 
@@ -13,7 +14,17 @@ namespace Curc.Models
 {
     public class UserPinModel : BaseModel
     {
-        public string image { get; set; }
+        private string _image;
+        public string image {
+			get { return _image; }
+			set {
+				if (_image != value) {
+					_image = value;
+					onPropertyChanged(nameof(image));
+					markerType = MarkerType.UserPin;
+				}
+			}
+		}
 
         private string _name;
         public string name {
@@ -53,28 +64,6 @@ namespace Curc.Models
                     setAnchor();
                 }
             }
-        }
-
-        private void setAnchor()
-        {
-            switch (markerType) {
-                case MarkerType.UserPin:
-                    pin.Anchor = new Point(0.5, 0.5);
-                    return;
-                case MarkerType.Start:
-                    pin.Icon = BitmapDescriptorFactory.FromStream(UserPinModel.startStream);
-                    break;
-                case MarkerType.Leg:
-                    pin.Icon = BitmapDescriptorFactory.FromStream(UserPinModel.legStream);
-                    break;
-                case MarkerType.StopOver:
-                    pin.Icon = BitmapDescriptorFactory.FromStream(UserPinModel.stopoverStream);
-                    break;
-                case MarkerType.End:
-                    pin.Icon = BitmapDescriptorFactory.FromStream(UserPinModel.endStream);
-                    break;
-            }
-            pin.Anchor = new Point(0.5, 1);
         }
 
         #region Position operations
@@ -122,6 +111,7 @@ namespace Curc.Models
             get {
                 if (_pin == null) {
                     _pin = new Pin {
+						Label = "",
                         IsDraggable = false,
                         Anchor = new Point(0.5, 0.5)
                     };
@@ -134,54 +124,90 @@ namespace Curc.Models
             }
         }
 
-        private static Stream _startStream;
-        private static Stream startStream {
-            get {
-                if (_startStream == null) {
-                    _startStream = getRawStream("start.png");
-                }
-                return _startStream;
-            }
-        }
-        private static Stream _legStream;
-        private static Stream legStream {
-            get {
-                if (_legStream == null) {
-                    _legStream = getRawStream("leg.png");
-                }
-                return _legStream;
-            }
-        }
-        private static Stream _stopoverStream;
-        private static Stream stopoverStream {
-            get {
-                if (_stopoverStream == null) {
-                    _stopoverStream = getRawStream("stopover.png");
-                }
-                return _stopoverStream;
-            }
-        }
-        private static Stream _endStream;
-        private static Stream endStream {
-            get {
-                if (_endStream == null) {
-                    _endStream = getRawStream("end.png");
-                }
-                return _endStream;
-            }
-        }
-        private static Stream getRawStream(string fileName)
-        {
-            byte[] buffer = null;
-            var assembly = typeof(UserPinModel).GetTypeInfo().Assembly;
-            using(var stream = assembly.GetManifestResourceStream($"Curc.Resources.{fileName}")) {
-                buffer = new byte[stream.Length];
-                stream.Read(buffer, 0, (int)stream.Length);
-                using (var editableImage = Plugin.ImageEdit.CrossImageEdit.Current.CreateImage(buffer)) {
-                    var modified = editableImage.Resize(((int)(30 * Constants.nativeScale)), ((int)(30 * Constants.nativeScale))).ToPng();
-                    return new MemoryStream(modified);
-                }
-            }
-        }
+        #region Image Processors
+		private static Stream _startStream;
+		private static Stream startStream {
+			get {
+				if (_startStream == null) {
+					_startStream = getRawStream("start.png");
+				}
+				return _startStream;
+			}
+		}
+		private static Stream _legStream;
+		private static Stream legStream {
+			get {
+				if (_legStream == null) {
+					_legStream = getRawStream("leg.png");
+				}
+				return _legStream;
+			}
+		}
+		private static Stream _stopoverStream;
+		private static Stream stopoverStream {
+			get {
+				if (_stopoverStream == null) {
+					_stopoverStream = getRawStream("stopover.png");
+				}
+				return _stopoverStream;
+			}
+		}
+		private static Stream _endStream;
+		private static Stream endStream {
+			get {
+				if (_endStream == null) {
+					_endStream = getRawStream("end.png");
+				}
+				return _endStream;
+			}
+		}
+		private static Stream getRawStream(string fileName)
+		{
+			byte[] buffer = null;
+			var assembly = typeof(UserPinModel).GetTypeInfo().Assembly;
+			using (var stream = assembly.GetManifestResourceStream($"Curc.Resources.{fileName}")) {
+				buffer = new byte[stream.Length];
+				stream.Read(buffer, 0, (int)stream.Length);
+				using (var editableImage = Plugin.ImageEdit.CrossImageEdit.Current.CreateImage(buffer)) {
+					var modified = editableImage.Resize(((int)(30 * Constants.nativeScale)), ((int)(30 * Constants.nativeScale))).ToPng();
+					return new MemoryStream(modified);
+				}
+			}
+		}
+		public async Task downloadImageLink()
+		{
+			if (string.IsNullOrWhiteSpace(image))
+				throw new Exception("Assign an image link first.");
+
+			var imageStream = await image.toStreamAsync();
+			if (imageStream != null) {
+				using (var editableImage = await Plugin.ImageEdit.CrossImageEdit.Current.CreateImageAsync(imageStream)) {
+					var modified = editableImage.Resize(((int)(30 * Constants.nativeScale)), ((int)(30 * Constants.nativeScale))).ToPng();
+					pin.Icon = BitmapDescriptorFactory.FromStream(new MemoryStream(modified));
+				}
+			}
+		}
+		private void setAnchor()
+		{
+			switch (markerType) {
+				case MarkerType.UserPin:
+					pin.Anchor = new Point(0.5, 0.5);
+					return;
+				case MarkerType.Start:
+					pin.Icon = BitmapDescriptorFactory.FromStream(UserPinModel.startStream);
+					break;
+				case MarkerType.Leg:
+					pin.Icon = BitmapDescriptorFactory.FromStream(UserPinModel.legStream);
+					break;
+				case MarkerType.StopOver:
+					pin.Icon = BitmapDescriptorFactory.FromStream(UserPinModel.stopoverStream);
+					break;
+				case MarkerType.End:
+					pin.Icon = BitmapDescriptorFactory.FromStream(UserPinModel.endStream);
+					break;
+			}
+			pin.Anchor = new Point(0.5, 1);
+		}
+        #endregion
     }
 }

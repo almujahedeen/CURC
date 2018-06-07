@@ -128,8 +128,18 @@ namespace Curc.ViewModels
                 }
             }
         }
-        private ICommand _addStartCommand;
-        public ICommand addStartCommand {
+		private ObservableCollection<Polyline> _routes;
+		public ObservableCollection<Polyline> routes {
+			get { return _routes; }
+			set {
+				if (_routes != value) {
+					_routes = value;
+					onPropertyChanged(nameof(routes));
+				}
+			}
+		}
+		private ICommand _addStartCommand;
+		public ICommand addStartCommand {
             get {
                 return _addStartCommand;
             }
@@ -195,6 +205,7 @@ namespace Curc.ViewModels
         public RideEdit2ViewModel(INavigation navigation, RideItemModelFull editableModel)
         {
             pins = new ObservableCollection<UserPinModel>();
+			routes = new ObservableCollection<Polyline>();
 
             saveCommand = new Command(async o => {
                 System.Diagnostics.Debug.WriteLine("Saved!");
@@ -215,9 +226,9 @@ namespace Curc.ViewModels
 
                 await setLocationByPlaceID(p.place_id);
             });
-            addStartCommand = new Command(() => {
-                addPin(MarkerType.Start);
-            });
+			addStartCommand = new Command(() => {
+				addPin(MarkerType.Start);
+			});
             addLegCommand = new Command(() => {
                 addPin(MarkerType.Leg);
             });
@@ -225,7 +236,7 @@ namespace Curc.ViewModels
                 addPin(MarkerType.StopOver);
             });
             addEndCommand = new Command(() => {
-                addPin(MarkerType.End);
+				addPin(MarkerType.End);
             });
         }
 
@@ -276,7 +287,7 @@ namespace Curc.ViewModels
                 moveToRegionCommand?.Execute(requestedRegion);
             }
         }
-        #endregion
+		#endregion
 
         private void addPin(MarkerType markerType)
         {
@@ -286,6 +297,29 @@ namespace Curc.ViewModels
                 position = visibleRegion.Center
             };
             pins.Add(userPinModel);
+
+			if (pins.Count - 2 >= 0)
+				setRoute(userPinModel.position, pins[pins.Count - 2].position);
         }
+		private async Task setRoute(Position? p1, Position? p2)
+		{
+			if (p1 == null || p2 == null)
+				return;
+			var query = $"https://maps.googleapis.com/maps/api/directions/json?origin={p1.Value.Latitude},{p1.Value.Longitude}&destination={p2.Value.Latitude},{p2.Value.Longitude}&mode=driving&key={Constants.placesAutocompleteAPIKey}";
+			var response = await API.instance.get<GoogleRoute>(query);
+			if(response?.Item1==true)
+			{
+				var positions = response.Item2.routes[0].overview_polyline.polyLinePositions;
+				var polyLine = new Polyline {
+					StrokeColor = Color.Blue,
+					StrokeWidth = 3,
+					IsClickable = false
+				};
+				foreach (var position in positions) {
+					polyLine.Positions.Add(position);
+				}
+				routes.Add(polyLine);
+			}
+		}
     }
 }
