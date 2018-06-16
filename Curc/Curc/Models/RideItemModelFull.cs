@@ -3,10 +3,12 @@ using Curc.ViewModels;
 using Curc.Views;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
+using Xamarin.Forms.GoogleMaps;
 
 namespace Curc.Models
 {
@@ -15,6 +17,9 @@ namespace Curc.Models
         public string rideDescription { get; set; }
         public TimeSpan rideTime { get; set; }
 
+        //Map properties
+        public ObservableCollection<UserPinModel> pins { get; set; }
+        public ObservableCollection<Polyline> routes { get; set; }
 
         //ViewModels
         public MapViewModel mapViewModel { get; set; }

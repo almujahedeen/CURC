@@ -52,28 +52,28 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Frame Grid.Row="0" Grid.Column="0">
+            <Frame Grid.Row="0" Grid.Column="0" IsVisible="{Binding startPinAvailable}">
                 <StackLayout effects:ButtonViewEffect.clickedCommand="{Binding addStartCommand}">
                     <Image Source="start"/>
                     <Label Text="Add Start"/>
                 </StackLayout>
             </Frame>
-            <Frame Grid.Row="0" Grid.Column="1">
+            <Frame Grid.Row="0" Grid.Column="1" IsVisible="{Binding endPinAvailable}">
+                <StackLayout effects:ButtonViewEffect.clickedCommand="{Binding addEndCommand}">
+                    <Image Source="end"/>
+                    <Label Text="Add End"/>
+                </StackLayout>
+            </Frame>
+            <Frame Grid.Row="1" Grid.Column="0">
                 <StackLayout effects:ButtonViewEffect.clickedCommand="{Binding addLegCommand}">
                     <Image Source="leg"/>
                     <Label Text="Add Leg"/>
                 </StackLayout>
             </Frame>
-            <Frame Grid.Row="1" Grid.Column="0">
+            <Frame Grid.Row="1" Grid.Column="1">
                 <StackLayout effects:ButtonViewEffect.clickedCommand="{Binding addStopoverCommand}">
                     <Image Source="stopover"/>
                     <Label Text="Add Stopover"/>
-                </StackLayout>
-            </Frame>
-            <Frame Grid.Row="1" Grid.Column="1">
-                <StackLayout effects:ButtonViewEffect.clickedCommand="{Binding addEndCommand}">
-                    <Image Source="end"/>
-                    <Label Text="Add End"/>
                 </StackLayout>
             </Frame>
 

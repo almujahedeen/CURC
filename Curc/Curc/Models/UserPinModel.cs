@@ -1,6 +1,8 @@
 ﻿using Curc.Enumerations;
 using Curc.Extensions;
 using Curc.Helpers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -52,6 +54,8 @@ namespace Curc.Models
             }
         }
 
+        //Should be string in API
+        [JsonConverter(typeof(StringEnumConverter))]
         private MarkerType _markerType;
         public MarkerType markerType {
             get {
@@ -66,7 +70,6 @@ namespace Curc.Models
             }
         }
 
-        #region Position operations
         private Position _position;
         public Position position {
             get {
@@ -79,32 +82,6 @@ namespace Curc.Models
                 }
             }
         }
-        private double? _latitude;
-        public double? latitude {
-            set {
-                if (_latitude != value) {
-                    _latitude = value;
-                    setPosition();
-                }
-            }
-        }
-        private double? _longitude;
-        public double? longitude {
-            set {
-                if (_longitude != value) {
-                    _longitude = value;
-                    setPosition();
-                }
-            }
-        }
-        private void setPosition()
-        {
-            if (_latitude == null || _longitude == null)
-                return;
-            position = new Position(_latitude.Value, _longitude.Value);
-            _latitude = _longitude = null;
-        } 
-        #endregion
 
         private Pin _pin;
         public Pin pin {

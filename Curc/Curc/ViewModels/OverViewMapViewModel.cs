@@ -53,33 +53,28 @@ namespace Curc.ViewModels
                 new UserPinModel {
                     image = "https://cdn4.iconfinder.com/data/icons/eldorado-user/40/user-128.png",
                     name = "Shit!",
-                    latitude = 41.902783,
-                    longitude = 12.496366,
+                    position = new Position(41.902783, 12.496366),
                     heading = 90
                 },
                 new UserPinModel {
                     image = "https://d30y9cdsu7xlg0.cloudfront.net/png/134315-200.png",
                     name = "Missile!",
-                    latitude = 41.852888,
-                    longitude = 12.568120
+                    position = new Position(41.852888, 12.568120)
                 },
                 new UserPinModel {
                     image = "https://d30y9cdsu7xlg0.cloudfront.net/png/996-200.png",
                     name = "Car!",
-                    latitude = 41.853815,
-                    longitude = 12.420148
+                    position = new Position(41.853815, 12.420148)
                 },
                 new UserPinModel {
                     image = "https://d30y9cdsu7xlg0.cloudfront.net/png/21191-200.png",
                     name = "Hello daddy!",
-                    latitude = 41.890629,
-                    longitude = 12.580136
+                    position = new Position(41.890629, 12.580136)
                 },
                 new UserPinModel {
                     image = "https://d30y9cdsu7xlg0.cloudfront.net/png/4254-200.png",
                     name = "Allahuakbar!",
-                    latitude = 41.870179,
-                    longitude = 12.494992
+                    position = new Position(41.870179, 12.494992)
                 }
             };
         }
